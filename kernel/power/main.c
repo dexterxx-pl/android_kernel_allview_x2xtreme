@@ -324,6 +324,14 @@ static ssize_t state_show(struct kobject *kobj, struct kobj_attribute *attr,
 	for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++)
 		if (pm_states[i].state)
 			s += sprintf(s,"%s ", pm_states[i].label);
+#else
+	int i;
+
+	for (i = 0; i < PM_SUSPEND_MAX; i++) {
+		if (pm_states[i] && valid_state(i))
+			s += sprintf(s,"%s ", pm_states[i]);
+	}
+#endif /* CONFIG_HAS_EARLYSUSPEND */
 #endif
 #ifdef CONFIG_HIBERNATION
 	s += sprintf(s, "%s\n", "disk");
